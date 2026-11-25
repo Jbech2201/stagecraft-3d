@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StageCraft 3D — Desain Panggung &amp; Sewa Produksi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- Icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-stage" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></symbol>
+  <symbol id="i-market" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></symbol>
+  <symbol id="i-light" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></symbol>
+  <symbol id="i-cost" viewBox="0 0 24 24"><path d="M5 2h14v20l-3.5-2-3.5 2-3.5-2L5 22z"/><path d="M9 7h6M9 11h6M9 15h3"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></symbol>
+  <symbol id="i-login" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></symbol>
+  <symbol id="i-orbit" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 3v6h-6"/></symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 01-12.4 7.4L3 20.5l1.7-5.4A8.4 8.4 0 1121 11.5z"/></symbol>
+</svg>
+
+<div class="app-shell">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="ico"><use href="#i-stage"/></svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">StageCraft 3D</span>
+        <span class="brand-project" id="status-project-lbl">Soundrenaline EDM Mainstage 2026</span>
+      </div>
+    </div>
+
+    <nav class="presets" aria-label="Template panggung">
+      <button type="button" class="preset-btn active" data-preset="edm" id="preset-edm">EDM Mainstage</button>
+      <button type="button" class="preset-btn" data-preset="rock" id="preset-rock">Rock Arena</button>
+      <button type="button" class="preset-btn" data-preset="gala" id="preset-gala">Corporate Gala</button>
+      <button type="button" class="preset-btn" data-preset="acoustic" id="preset-acoustic">Acoustic</button>
+    </nav>
+
+    <div class="topbar-actions">
+      <button type="button" class="btn btn-primary" data-open-rab="true">
+        <svg viewBox="0 0 24 24" class="ico"><use href="#i-doc"/></svg>
+        Dokumen RAB
+      </button>
+
+      <div class="menu-wrap">
+        <button type="button" class="icon-btn account-btn" id="btn-account" aria-haspopup="true" aria-expanded="false" aria-label="Menu akun dan pengaturan" title="Akun &amp; pengaturan">
+          <svg viewBox="0 0 24 24" class="ico"><use href="#i-user"/></svg>
+          <span class="account-dot"></span>
+        </button>
+
+        <div class="menu hidden" id="account-menu" role="menu">
+          <div class="menu-head">
+            <span class="role-badge guest" id="lbl-user-role">Mode: Konsumen</span>
+          </div>
+
+          <button type="button" class="menu-item" id="btn-quality" role="menuitem" title="Ubah kualitas render WebGL">
+            <svg viewBox="0 0 24 24" class="ico"><use href="#i-monitor"/></svg>
+            <span>Kualitas render</span>
+            <strong class="menu-value" id="lbl-quality">HIGH</strong>
+          </button>
+          <button type="button" class="menu-item" id="btn-open-json" role="menuitem">
+            <svg viewBox="0 0 24 24" class="ico"><use href="#i-code"/></svg>
+            <span>Export / Import JSON</span>
+          </button>
+
+          <div class="menu-sep hidden" data-vendor-only="true"></div>
+          <button type="button" class="menu-item hidden" data-vendor-only="true" id="btn-open-vendor-dash" role="menuitem">
+            <svg viewBox="0 0 24 24" class="ico"><use href="#i-inbox"/></svg>
+            <span>Pesanan masuk</span>
+            <strong class="menu-value warn" id="badge-pending-orders">(0)</strong>
+          </button>
+          <button type="button" class="menu-item hidden" data-vendor-only="true" id="btn-open-crud" role="menuitem">
+            <svg viewBox="0 0 24 24" class="ico"><use href="#i-box"/></svg>
+            <span>Kelola inventori &amp; tarif</span>
+          </button>
+
+          <div class="menu-sep"></div>
+          <button type="button" class="menu-item" data-guest-only="true" id="btn-open-vendor-login" role="menuitem">
+            <svg viewBox="0 0 24 24" class="ico"><use href="#i-login"/></svg>
+            <span>Masuk sebagai penjual</span>
+          </button>
+          <button type="button" class="menu-item danger hidden" data-vendor-only="true" id="btn-vendor-logout" role="menuitem">
+            <svg viewBox="0 0 24 24" class="ico"><use href="#i-logout"/></svg>
+            <span>Keluar</span>
+          </button>
+
+          <div class="menu-foot">1–4 kamera · Spasi beat sync · Esc tutup</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="workspace">
+
+    <!-- ICON RAIL -->
+    <nav class="rail" aria-label="Panel">
+      <button type="button" class="rail-btn" data-dock-open="stage" aria-label="Panggung" aria-expanded="false">
+        <svg viewBox="0 0 24 24" class="ico"><use href="#i-stage"/></svg>
+        <span class="rail-tip">Panggung</span>
+      </button>
+      <button type="button" class="rail-btn" data-dock-open="market" aria-label="Marketplace alat" aria-expanded="false">
+        <svg viewBox="0 0 24 24" class="ico"><use href="#i-market"/></svg>
+        <span class="rail-tip">Marketplace</span>
+      </button>
+      <button type="button" class="rail-btn" data-dock-open="light" aria-label="Pencahayaan DMX" aria-expanded="false">
+        <svg viewBox="0 0 24 24" class="ico"><use href="#i-light"/></svg>
+        <span class="rail-tip">Pencahayaan</span>
+      </button>
+      <button type="button" class="rail-btn" data-dock-open="cost" aria-label="Daya dan biaya" aria-expanded="false">
+        <svg viewBox="0 0 24 24" class="ico"><use href="#i-cost"/></svg>
+        <span class="rail-tip">Daya &amp; Biaya</span>
+      </button>
+    </nav>
+
+    <main class="center-stage">
+      <div class="viewport-wrapper">
+
+        <!-- Camera -->
+        <div class="hud-camera" role="toolbar" aria-label="Sudut kamera">
+          <button type="button" class="seg-btn active" id="cam-foh" data-cam-preset="foh" title="Tombol 1">FOH</button>
+          <button type="button" class="seg-btn" id="cam-bird" data-cam-preset="bird" title="Tombol 2">Atas</button>
+          <button type="button" class="seg-btn" id="cam-front" data-cam-preset="front" title="Tombol 3">Depan</button>
+          <button type="button" class="seg-btn" id="cam-side" data-cam-preset="side" title="Tombol 4">Samping</button>
+          <span class="seg-sep"></span>
+          <button type="button" class="seg-btn" id="cam-orbit" title="Putar otomatis">
+            <svg viewBox="0 0 24 24" class="ico"><use href="#i-orbit"/></svg>
+            Orbit
+          </button>
+        </div>
+
+        <!-- Stats + estimate -->
+        <div class="hud-stats">
+          <div class="stat-chip">
+            <span><strong id="hud-area">126 m²</strong></span>
+            <i></i>
+            <span><strong id="hud-fixtures">38 Unit</strong></span>
+            <i></i>
+            <span><strong id="hud-kva">24.5 kVA</strong></span>
+          </div>
+          <button type="button" class="estimate-chip" data-dock-open="cost" title="Buka rincian biaya">
+            <span class="estimate-label">Estimasi</span>
+            <strong id="hud-total">Rp 0</strong>
+          </button>
+        </div>
+
+        <!-- Selected fixture -->
+        <div class="hud-target" id="hud-selection-box">
+          <span>Target DMX <strong id="lbl-selected-fixture">Semua Fixture (Master Group)</strong></span>
+          <button type="button" id="btn-reset-fixture" class="link-action">Reset</button>
+        </div>
+
+        <div id="stage-canvas-container" role="img" aria-label="Simulasi panggung 3D interaktif"></div>
+
+        <!-- HIDDEN-BY-DEFAULT DOCK -->
+        <aside class="dock" id="dock" aria-label="Panel pengaturan">
+
+          <!-- PANGGUNG -->
+          <section class="dock-panel" data-panel="stage" hidden>
+            <header class="dock-head">
+              <h2>Panggung</h2>
+              <button type="button" class="icon-btn" data-dock-close aria-label="Tutup panel">
+                <svg viewBox="0 0 24 24" class="ico"><use href="#i-close"/></svg>
+              </button>
+            </header>
+            <div class="dock-body">
+              <div class="group">
+                <div class="field">
+                  <label class="field-label" for="inp-project-name">Nama proyek</label>
+                  <input type="text" id="inp-project-name" class="text-input" value="Soundrenaline EDM Mainstage 2026" />
+                </div>
+                <div class="field">
+                  <label class="field-label" for="sel-stage-type">Tipe panggung</label>
+                  <select id="sel-stage-type" class="select-input">
+                    <option value="festival_truss">Outdoor Festival Box Truss</option>
+                    <option value="catwalk_t">Concert Arena + Catwalk T-Stage</option>
+                    <option value="indoor_ballroom">Indoor Ballroom / Gala Carpet</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="group">
+                <h3 class="group-title">Dimensi</h3>
+                <div class="field">
+                  <div class="field-label"><label for="rng-stage-width">Lebar</label><span class="control-val" id="val-stage-width">14 m</span></div>
+                  <input type="range" id="rng-stage-width" min="6" max="20" step="1" value="14" />
+                </div>
+                <div class="field">
+                  <div class="field-label"><label for="rng-stage-depth">Kedalaman</label><span class="control-val" id="val-stage-depth">9 m</span></div>
+                  <input type="range" id="rng-stage-depth" min="4" max="14" step="1" value="9" />
+                </div>
+                <div class="field">
+                  <div class="field-label"><label for="rng-stage-height">Tinggi deck</label><span class="control-val" id="val-stage-height">1.2 m</span></div>
+                  <input type="range" id="rng-stage-height" min="0.6" max="2.0" step="0.2" value="1.2" />
+                </div>
+              </div>
+
+              <div class="group">
+                <h3 class="group-title">Struktur atas</h3>
+                <div class="toggle-grid">
+                  <button type="button" class="toggle-btn active" id="tog-canopy"><span>Atap canopy</span><span class="toggle-dot"></span></button>
+                  <button type="button" class="toggle-btn active" id="tog-ledwall"><span>LED videotron</span><span class="toggle-dot"></span></button>
+                </div>
+              </div>
+
+              <div class="group">
+                <h3 class="group-title">Tirai panggung</h3>
+                <div class="field">
+                  <div class="field-label"><label for="rng-curtain-open">Bukaan tirai</label><span class="control-val" id="val-curtain-open">85%</span></div>
+                  <input type="range" id="rng-curtain-open" min="0" max="100" step="1" value="85" />
+                </div>
+                <div class="toggle-grid">
+                  <button type="button" class="btn btn-block" id="btn-curtain-open">Buka penuh</button>
+                  <button type="button" class="btn btn-block" id="btn-curtain-close">Tutup penuh</button>
+                </div>
+              </div>
+
+              <div class="group">
+                <div class="group-row">
+                  <h3 class="group-title">Unit terpasang</h3>
+                  <button type="button" id="btn-goto-equip" class="link-action">Ke marketplace →</button>
+                </div>
+                <dl class="summary-list" id="quick-fixture-summary"></dl>
+              </div>
+            </div>
+          </section>
+
+          <!-- MARKETPLACE -->
+          <section class="dock-panel" data-panel="market" hidden>
+            <header class="dock-head">
+              <div>
+                <h2>Marketplace alat</h2>
+                <p class="dock-sub">Tambah atau kurangi unit. Model 3D, daya, dan RAB ikut berubah.</p>
+              </div>
+              <button type="button" class="icon-btn" data-dock-close aria-label="Tutup panel">
+                <svg viewBox="0 0 24 24" class="ico"><use href="#i-close"/></svg>
+              </button>
+            </header>
+            <div class="dock-body">
+              <div id="equipment-picker-list" class="equip-list"></div>
+            </div>
+          </section>
+
+          <!-- PENCAHAYAAN -->
+          <section class="dock-panel" data-panel="light" hidden>
+            <header class="dock-head">
+              <div>
+                <h2>Pencahayaan &amp; DMX</h2>
+                <p class="dock-sub" id="lbl-dmx-mode-badge">MODE: WAVE</p>
+              </div>
+              <button type="button" class="icon-btn" data-dock-close aria-label="Tutup panel">
+                <svg viewBox="0 0 24 24" class="ico"><use href="#i-close"/></svg>
+              </button>
+            </header>
+            <div class="dock-body">
+              <div class="group">
+                <h3 class="group-title">Moving head</h3>
+                <div class="field">
+                  <div class="field-label"><label for="rng-dmx-pan">Pan</label><span class="control-val" id="val-dmx-pan">0°</span></div>
+                  <input type="range" id="rng-dmx-pan" min="-180" max="180" step="1" value="0" />
+                </div>
+                <div class="field">
+                  <div class="field-label"><label for="rng-dmx-tilt">Tilt</label><span class="control-val" id="val-dmx-tilt">35°</span></div>
+                  <input type="range" id="rng-dmx-tilt" min="-85" max="85" step="1" value="35" />
+                </div>
+              </div>
+
+              <div class="group">
+                <h3 class="group-title">Output</h3>
+                <div class="field">
+                  <div class="field-label"><label for="rng-dmx-dimmer">Master dimmer</label><span class="control-val" id="val-dmx-dimmer">95%</span></div>
+                  <input type="range" id="rng-dmx-dimmer" min="0" max="100" step="1" value="95" />
+                </div>
+                <div class="field">
+                  <div class="field-label"><label for="rng-dmx-strobe">Strobe</label><span class="control-val" id="val-dmx-strobe">0 Hz</span></div>
+                  <input type="range" id="rng-dmx-strobe" min="0" max="20" step="1" value="0" />
+                </div>
+                <div class="field">
+                  <div class="field-label"><label for="rng-dmx-speed">Kecepatan cue</label><span class="control-val" id="val-dmx-speed">1.2x</span></div>
+                  <input type="range" id="rng-dmx-speed" min="0.2" max="3.0" step="0.1" value="1.2" />
+                </div>
+                <div class="field">
+                  <div class="field-label"><label for="rng-dmx-smoke">Kepekatan kabut</label><span class="control-val" id="val-dmx-smoke">65%</span></div>
+                  <input type="range" id="rng-dmx-smoke" min="0" max="100" step="1" value="65" />
+                </div>
+              </div>
+
+              <div class="group">
+                <h3 class="group-title">Warna</h3>
+                <div class="field">
+                  <div class="field-label"><label for="clr-beam">Beam</label><input type="color" id="clr-beam" value="#06b6d4" /></div>
+                  <div class="swatch-row" id="beam-swatches" role="radiogroup" aria-label="Preset warna beam">
+                    <button type="button" class="color-swatch active" style="background:#06b6d4" data-beam-color="#06b6d4" aria-label="Cyan"></button>
+                    <button type="button" class="color-swatch" style="background:#f59e0b" data-beam-color="#f59e0b" aria-label="Amber"></button>
+                    <button type="button" class="color-swatch" style="background:#ec4899" data-beam-color="#ec4899" aria-label="Magenta"></button>
+                    <button type="button" class="color-swatch" style="background:#10b981" data-beam-color="#10b981" aria-label="Emerald"></button>
+                    <button type="button" class="color-swatch" style="background:#3b82f6" data-beam-color="#3b82f6" aria-label="Blue"></button>
+                    <button type="button" class="color-swatch" style="background:#ef4444" data-beam-color="#ef4444" aria-label="Red"></button>
+                    <button type="button" class="color-swatch" style="background:#a855f7" data-beam-color="#a855f7" aria-label="Violet"></button>
+                    <button type="button" class="color-swatch" style="background:#ffffff" data-beam-color="#ffffff" aria-label="White"></button>
+                  </div>
+                </div>
+                <div class="field field-inline">
+                  <label class="field-label" for="clr-wash">PAR wash</label>
+                  <input type="color" id="clr-wash" value="#ec4899" />
+                </div>
+                <div class="field field-inline">
+                  <label class="field-label" for="clr-laser">Laser RGB</label>
+                  <input type="color" id="clr-laser" value="#10b981" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- DAYA & BIAYA -->
+          <section class="dock-panel" data-panel="cost" hidden>
+            <header class="dock-head">
+              <h2>Daya &amp; biaya</h2>
+              <button type="button" class="icon-btn" data-dock-close aria-label="Tutup panel">
+                <svg viewBox="0 0 24 24" class="ico"><use href="#i-close"/></svg>
+              </button>
+            </header>
+            <div class="dock-body">
+              <div class="group">
+                <div class="power-box">
+                  <div class="row-between">
+                    <span class="muted">Beban listrik</span>
+                    <strong class="tabular" id="lbl-power-watt">19,600 W (24.5 kVA)</strong>
+                  </div>
+                  <div class="power-bar-bg"><div class="power-bar-fill" id="power-bar-fill"></div></div>
+                  <div class="row-between">
+                    <span class="muted">Rekomendasi genset</span>
+                    <strong class="warn" id="lbl-genset-rec">Genset Silent 40 kVA</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="group">
+                <div class="field field-inline">
+                  <label class="field-label" for="sel-rental-days">Durasi sewa</label>
+                  <select id="sel-rental-days" class="select-input select-compact">
+                    <option value="1">1 hari</option>
+                    <option value="2">2 hari</option>
+                    <option value="3">3 hari</option>
+                    <option value="5">5 hari</option>
+                    <option value="7">7 hari</option>
+                  </select>
+                </div>
+                <div class="boq-mini-list" id="boq-mini-list"></div>
+              </div>
+
+              <div class="group">
+                <div class="total-box">
+                  <div class="row-between">
+                    <span class="muted">Biaya per hari</span>
+                    <span class="tabular" id="lbl-daily-total">Rp 0</span>
+                  </div>
+                  <div class="total-line">
+                    <span>Total estimasi</span>
+                    <strong class="grand-total-val tabular" id="lbl-grand-total">Rp 0</strong>
+                  </div>
+                </div>
+                <div class="stack">
+                  <button type="button" class="btn btn-block" data-open-rab="true">
+                    <svg viewBox="0 0 24 24" class="ico"><use href="#i-doc"/></svg>
+                    Rincian &amp; cetak RAB
+                  </button>
+                  <button type="button" class="btn btn-primary btn-block" data-order-wa="true">
+                    <svg viewBox="0 0 24 24" class="ico"><use href="#i-whatsapp"/></svg>
+                    Booking via WhatsApp
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <!-- DMX DECK -->
+      <div class="dmx-deck">
+        <div class="cue-group" role="toolbar" aria-label="Cue DMX">
+          <span class="deck-label">Cue</span>
+          <button type="button" class="cue-btn" data-dmx-cue="MANUAL">Manual</button>
+          <button type="button" class="cue-btn active" data-dmx-cue="WAVE">Wave</button>
+          <button type="button" class="cue-btn" data-dmx-cue="BALLYHOO">Ballyhoo</button>
+          <button type="button" class="cue-btn" data-dmx-cue="CENTER">Center</button>
+          <button type="button" class="cue-btn" data-dmx-cue="STROBE_DROP">Strobe Drop</button>
+          <button type="button" class="cue-btn blackout" data-dmx-cue="BLACKOUT">Blackout</button>
+        </div>
+
+        <div class="fx-group">
+          <button type="button" class="btn-fx btn-spark" id="btn-trigger-spark">
+            <svg viewBox="0 0 24 24" class="ico"><use href="#i-zap"/></svg>
+            <span class="lbl">Sparkular</span>
+          </button>
+          <button type="button" class="btn-fx btn-beat" id="btn-beat-sync">
+            <svg viewBox="0 0 24 24" class="ico"><use href="#i-play"/></svg>
+            <span class="lbl">Beat sync</span>
+          </button>
+          <canvas id="beat-visualizer-canvas" width="84" height="28" title="Spektrum audio"></canvas>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL: RAB -->
+<div class="modal-backdrop" id="rab-modal" role="dialog" aria-modal="true" aria-labelledby="rab-modal-title">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3 id="rab-modal-title">Penawaran Sewa Produksi (RAB)</h3>
+      <button type="button" class="icon-btn" data-close-modal="rab-modal" aria-label="Tutup"><svg viewBox="0 0 24 24" class="ico"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p class="notice">Dikalkulasi otomatis dari geometri panggung dan unit terpasang. Tarif dan kontak bersifat simulasi.</p>
+
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label" for="rab-client-name">Nama klien / EO</label>
+          <input type="text" id="rab-client-name" class="text-input" value="PT Kreasi Konser Nusantara" />
+        </div>
+        <div class="field">
+          <label class="field-label" for="rab-client-phone">Kontak / WhatsApp</label>
+          <input type="text" id="rab-client-phone" class="text-input" value="0812-3456-7890 (Simulasi)" />
+        </div>
+        <div class="field">
+          <label class="field-label" for="rab-event-date">Tanggal acara</label>
+          <input type="date" id="rab-event-date" class="text-input" value="2026-12-15" />
+        </div>
+      </div>
+
+      <div id="rab-summary-header" class="rab-summary"></div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>No</th><th>Peralatan</th><th>Kategori</th><th>Qty</th><th>Daya</th><th>Harga / hari</th><th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody id="rab-table-body"></tbody>
+        </table>
+      </div>
+
+      <div class="modal-foot">
+        <p class="muted small">Harga sudah termasuk kru instalasi rigging, operator FOH lighting, dan sound engineer standar.</p>
+        <div class="btn-row">
+          <button type="button" class="btn" id="btn-print-rab">Cetak / PDF</button>
+          <button type="button" class="btn btn-success" id="btn-submit-booking">Ajukan booking</button>
+          <button type="button" class="btn btn-primary" data-order-wa="true">Kirim ke WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CRUD -->
+<div class="modal-backdrop" id="crud-modal" role="dialog" aria-modal="true" aria-labelledby="crud-modal-title">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3 id="crud-modal-title">Inventori &amp; tarif sewa</h3>
+      <button type="button" class="icon-btn" data-close-modal="crud-modal" aria-label="Tutup"><svg viewBox="0 0 24 24" class="ico"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-toolbar">
+        <p class="muted">Kelola tarif harian, daya, dan stok. Perubahan langsung memperbarui RAB.</p>
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" id="btn-crud-add">Tambah alat</button>
+          <button type="button" class="btn btn-danger" id="btn-crud-reset">Reset default</button>
+        </div>
+      </div>
+
+      <div id="crud-form-box" class="form-box hidden">
+        <h4 id="crud-form-title">Tambah / edit alat</h4>
+        <input type="hidden" id="crud-id" />
+        <div class="form-grid">
+          <div class="field"><label class="field-label" for="crud-nama">Nama alat</label><input type="text" id="crud-nama" class="text-input" placeholder="Contoh: Moving Head Matrix" /></div>
+          <div class="field"><label class="field-label" for="crud-kategori">Kategori</label>
+            <select id="crud-kategori" class="select-input">
+              <option value="LIGHTING">LIGHTING</option><option value="AUDIO">AUDIO</option><option value="FX">FX</option><option value="STAGE">STAGE</option>
+            </select>
+          </div>
+          <div class="field"><label class="field-label" for="crud-watt">Daya (Watt)</label><input type="number" id="crud-watt" class="text-input" value="350" min="0" /></div>
+          <div class="field"><label class="field-label" for="crud-harga">Harga sewa / hari (Rp)</label><input type="number" id="crud-harga" class="text-input" value="400000" min="0" /></div>
+          <div class="field"><label class="field-label" for="crud-stok">Stok maksimum</label><input type="number" id="crud-stok" class="text-input" value="16" min="1" /></div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" id="btn-crud-save">Simpan</button>
+          <button type="button" class="btn" id="btn-crud-cancel">Batal</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>Nama alat</th><th>Kategori</th><th>Satuan</th><th>Daya</th><th>Tarif / hari</th><th>Stok</th><th></th></tr>
+          </thead>
+          <tbody id="crud-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: JSON -->
+<div class="modal-backdrop" id="json-modal" role="dialog" aria-modal="true" aria-labelledby="json-modal-title">
+  <div class="modal-window modal-sm">
+    <div class="modal-header">
+      <h3 id="json-modal-title">Export / Import konfigurasi</h3>
+      <button type="button" class="icon-btn" data-close-modal="json-modal" aria-label="Tutup"><svg viewBox="0 0 24 24" class="ico"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p class="muted">Salin JSON untuk menyimpan proyek, atau tempel JSON lain lalu klik <strong>Muat konfigurasi</strong>.</p>
+      <textarea id="json-textarea" class="text-input code-area" rows="12"></textarea>
+      <div class="btn-row end">
+        <button type="button" class="btn" id="btn-copy-json">Salin JSON</button>
+        <button type="button" class="btn btn-primary" id="btn-import-json">Muat konfigurasi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: LOGIN -->
+<div class="modal-backdrop" id="vendor-login-modal" role="dialog" aria-modal="true" aria-labelledby="vendor-login-title">
+  <div class="modal-window modal-xs">
+    <div class="modal-header">
+      <h3 id="vendor-login-title">Masuk sebagai penjual</h3>
+      <button type="button" class="icon-btn" data-close-modal="vendor-login-modal" aria-label="Tutup"><svg viewBox="0 0 24 24" class="ico"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p class="muted">Konsumen tidak perlu login untuk merancang panggung dan mengajukan sewa. Penjual masuk dengan akun Google yang sudah terdaftar untuk mengelola inventori, pesanan, dan pengaturan vendor.</p>
+
+      <button type="button" class="btn-google" id="btn-google-signin">
+        <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        <span id="lbl-google-signin">Lanjutkan dengan Google</span>
+      </button>
+      <p class="muted small">Akun yang belum terdaftar sebagai penjual akan otomatis dikeluarkan.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: VENDOR DASHBOARD -->
+<div class="modal-backdrop" id="vendor-dashboard-modal" role="dialog" aria-modal="true" aria-labelledby="vendor-dash-title">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3 id="vendor-dash-title">Dashboard penjual</h3>
+      <button type="button" class="icon-btn" data-close-modal="vendor-dashboard-modal" aria-label="Tutup"><svg viewBox="0 0 24 24" class="ico"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="kpi-grid">
+        <div class="kpi"><span class="kpi-label">Total pesanan</span><strong class="kpi-val tabular" id="vendor-stat-total">0</strong></div>
+        <div class="kpi"><span class="kpi-label">Menunggu konfirmasi</span><strong class="kpi-val warn tabular" id="vendor-stat-pending">0</strong></div>
+        <div class="kpi"><span class="kpi-label">Omzet disetujui</span><strong class="kpi-val ok tabular" id="vendor-stat-revenue">Rp 0</strong></div>
+      </div>
+
+      <div class="form-box">
+        <h4>Identitas vendor</h4>
+        <div class="form-grid vendor-set-grid">
+          <div class="field"><label class="field-label" for="vendor-set-company">Nama perusahaan rental</label><input type="text" id="vendor-set-company" class="text-input" /></div>
+          <div class="field"><label class="field-label" for="vendor-set-wa">Nomor WhatsApp (628xxx)</label><input type="text" id="vendor-set-wa" class="text-input" /></div>
+          <button type="button" class="btn btn-primary" id="btn-save-vendor-settings">Simpan</button>
+        </div>
+      </div>
+
+      <h4 class="section-title">Pengajuan sewa dari konsumen</h4>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>ID</th><th>Klien / acara</th><th>Tanggal</th><th>Panggung &amp; daya</th><th>Total RAB</th><th>Status</th><th>Ubah</th></tr>
+          </thead>
+          <tbody id="vendor-orders-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
