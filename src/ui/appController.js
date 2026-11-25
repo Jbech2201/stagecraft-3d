@@ -456,17 +456,6 @@ export class AppController {
     document.getElementById('btn-import-json')?.addEventListener('click', () => this.importJsonConfig());
   }
 
-  completeGoogleLogin(email, displayName) {
-    const res = this.store.loginVendorWithGoogle({ email, displayName });
-    if (res.ok) {
-      this.closeModal('vendor-login-modal');
-      this.syncRoleVisibility();
-      showToast(`Login Google berhasil sebagai ${res.session.email}`);
-    } else {
-      showToast(res.error, true);
-    }
-  }
-
   toggleDock(name) {
     if (this.activePanel === name) this.closeDock();
     else this.openDock(name);
