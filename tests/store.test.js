@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { store } from '../src/state/store.js';
+import { store, DEMO_VENDOR_ACCOUNTS } from '../src/state/store.js';
 import { orderToRow, rowToOrder } from '../src/lib/cloud.js';
 
-describe('Role-based access (Consumer vs Vendor via verified Google session)', () => {
+describe('Role-based access (Consumer vs Vendor via username/password)', () => {
   beforeEach(() => {
     store.logoutVendor();
     store.bookingOrders = [];
@@ -20,16 +20,16 @@ describe('Role-based access (Consumer vs Vendor via verified Google session)', (
     expect(store.updateVendorSettings('Fake Vendor', '628000')).toBe(false);
   });
 
-  it('unlocks vendor features only after the verified vendor session is set', () => {
-    const bad = store.setVendorSession({ email: 'not-an-email' });
-    expect(bad.ok).toBe(false);
+  it('rejects wrong credentials and unlocks vendor features with a valid dummy account', () => {
+    expect(store.loginVendor('vendor', 'salah').ok).toBe(false);
+    expect(store.loginVendor('', '').ok).toBe(false);
     expect(store.isVendor()).toBe(false);
 
-    const good = store.setVendorSession({ email: 'Owner@Example.com', displayName: 'Owner' });
-    expect(good.ok).toBe(true);
-    expect(store.isVendor()).toBe(true);
-    expect(store.vendorSession.authProvider).toBe('google');
-    expect(store.vendorSession.email).toBe('owner@example.com');
+    for (const a of DEMO_VENDOR_ACCOUNTS) {
+      store.logoutVendor();
+      expect(store.loginVendor(a.username.toUpperCase(), a.password).ok).toBe(true);
+      expect(store.isVendor()).toBe(true);
+    }
 
     const order = store.addBookingOrder({ clientName: 'EO Jaya', grandTotal: 20000000 });
     expect(store.updateOrderStatus(order.id, 'APPROVED')).toBe(true);

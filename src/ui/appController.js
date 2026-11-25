@@ -133,8 +133,8 @@ export class AppController {
     if (roleBadge) {
       roleBadge.className = `role-badge ${isVendor ? 'vendor' : 'guest'}`;
       if (isVendor) {
-        const providerTag = sess.authProvider === 'google' ? 'Google' : 'Vendor';
-        roleBadge.textContent = `Penjual (${providerTag}): ${sess.email || sess.username}`;
+        const providerTag = 'Vendor';
+        roleBadge.textContent = `Penjual: ${sess.displayName || sess.username}`;
       } else {
         roleBadge.textContent = 'Mode: Konsumen';
       }
@@ -142,7 +142,7 @@ export class AppController {
 
     if (statusAuthLbl) {
       statusAuthLbl.textContent = isVendor
-        ? `Sesi Penjual: ${sess.displayName || sess.username} (${sess.authProvider === 'google' ? 'Google OAuth' : 'Kredensial'})`
+        ? `Sesi Penjual: ${sess.displayName || sess.username} (@${sess.username})`
         : 'Sesi: Konsumen (Tanpa Login)';
     }
 
@@ -385,24 +385,34 @@ export class AppController {
     // Consumer Booking Submission
     document.getElementById('btn-submit-booking')?.addEventListener('click', () => this.submitConsumerBooking());
 
-    // Vendor Auth (Password & Google Sign-In)
+    // Vendor Auth (username & password)
     document.getElementById('btn-open-vendor-login')?.addEventListener('click', () => {
       this.openModal('vendor-login-modal');
     });
 
-    document.getElementById('btn-google-signin')?.addEventListener('click', async () => {
-      if (!cloud.cloudEnabled) {
-        showToast('Supabase belum dikonfigurasi (cek file .env).', true);
+    const loginForm = document.getElementById('vendor-login-form');
+    loginForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = document.getElementById('login-username');
+      const pass = document.getElementById('login-password');
+      const res = this.store.loginVendor(user.value, pass.value);
+      if (!res.ok) {
+        showToast(res.error, true);
+        pass.value = '';
+        pass.focus();
         return;
       }
-      const lbl = document.getElementById('lbl-google-signin');
-      if (lbl) lbl.textContent = 'Mengarahkan ke Google…';
-      try {
-        await cloud.signInWithGoogle();
-      } catch (err) {
-        if (lbl) lbl.textContent = 'Lanjutkan dengan Google';
-        showToast(`Login gagal: ${err.message}`, true);
-      }
+      loginForm.reset();
+      this.closeModal('vendor-login-modal');
+      this.syncRoleVisibility();
+      showToast(`Login berhasil sebagai ${res.session.displayName}.`);
+    });
+
+    document.querySelectorAll('[data-demo-account]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.getElementById('login-username').value = btn.dataset.demoAccount;
+        document.getElementById('login-password').value = btn.dataset.demoPass;
+      });
     });
 
     document.getElementById('btn-vendor-logout')?.addEventListener('click', async () => {

@@ -2,9 +2,11 @@ import { createClient } from '@supabase/supabase-js';
 
 const URL = import.meta.env?.VITE_SUPABASE_URL;
 const KEY = import.meta.env?.VITE_SUPABASE_ANON_KEY;
+// Opt-in: Supabase hanya aktif bila VITE_USE_SUPABASE=true (default: mode lokal + login username/password).
+const ENABLED = import.meta.env?.VITE_USE_SUPABASE === 'true';
 
 export const supabase =
-  URL && KEY
+  ENABLED && URL && KEY
     ? createClient(URL, KEY, { auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true } })
     : null;
 

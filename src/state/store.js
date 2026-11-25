@@ -25,6 +25,17 @@ function loadFromStorage(key, fallback) {
   }
 }
 
+const STORAGE_SESSION_KEY = 'stagecraft_vendor_session';
+
+/** Akun dummy untuk demo. Dicek di sisi klien, jadi BUKAN keamanan sungguhan. */
+export const DEMO_VENDOR_ACCOUNTS = [
+  { username: 'vendor', password: 'stagecraft2026', displayName: 'Vendor Utama' },
+  { username: 'admin', password: 'admin123', displayName: 'Administrator' },
+  { username: 'budi', password: 'budi123', displayName: 'Budi Santoso' },
+  { username: 'sari', password: 'sari123', displayName: 'Sari Wulandari' },
+  { username: 'demo', password: 'demo', displayName: 'Akun Demo' },
+];
+
 function emptySession() {
   return { isLoggedIn: false, username: null, email: null, displayName: null, authProvider: null };
 }
@@ -35,8 +46,7 @@ class StageStore {
     this.stageConfig = loadFromStorage(STORAGE_CONFIG_KEY, DEFAULT_STAGE_CONFIG);
     this.bookingOrders = loadFromStorage(STORAGE_ORDERS_KEY, []);
     this.vendorSettings = loadFromStorage(STORAGE_VENDOR_SETTINGS_KEY, DEFAULT_VENDOR_SETTINGS);
-    // Vendor role is never trusted from localStorage: it is derived from the Supabase session + RLS.
-    this.vendorSession = emptySession();
+    this.vendorSession = this.restoreSession();
 
     this.stageConfig.dmxState.sparkularActive = false;
     this.stageConfig.dmxState.beatSyncActive = false;
@@ -58,24 +68,37 @@ class StageStore {
     return Boolean(this.vendorSession?.isLoggedIn);
   }
 
-  /** Called only after the server confirmed the signed-in Google email is a registered vendor. */
-  setVendorSession({ email, displayName }) {
-    const mail = String(email || '').trim().toLowerCase();
-    if (!mail || !mail.includes('@')) return { ok: false, error: 'Alamat email akun Google tidak valid.' };
+  restoreSession() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_SESSION_KEY) || 'null');
+      const acc = saved && DEMO_VENDOR_ACCOUNTS.find((a) => a.username === saved.username);
+      if (acc) return { isLoggedIn: true, username: acc.username, email: null, displayName: acc.displayName, authProvider: 'password' };
+    } catch {
+      // storage unavailable
+    }
+    return emptySession();
+  }
+
+  loginVendor(username, password) {
+    const user = String(username || '').trim().toLowerCase();
+    const acc = DEMO_VENDOR_ACCOUNTS.find((a) => a.username === user && a.password === String(password || ''));
+    if (!acc) return { ok: false, error: 'Username atau password salah.' };
     this.vendorSession = {
       isLoggedIn: true,
-      username: mail.split('@')[0],
-      email: mail,
-      displayName: String(displayName || '').trim() || mail.split('@')[0],
-      authProvider: 'google',
+      username: acc.username,
+      email: null,
+      displayName: acc.displayName,
+      authProvider: 'password',
       loggedInAt: new Date().toISOString(),
     };
+    try { localStorage.setItem(STORAGE_SESSION_KEY, JSON.stringify({ username: acc.username })); } catch { /* ignore */ }
     this.notify('auth');
     return { ok: true, session: this.vendorSession };
   }
 
   logoutVendor() {
     this.vendorSession = emptySession();
+    try { localStorage.removeItem(STORAGE_SESSION_KEY); } catch { /* ignore */ }
     this.notify('auth');
   }
 
